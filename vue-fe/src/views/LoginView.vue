@@ -9,7 +9,7 @@
       </p>
 
       <p class="font-bold">
-        Already have an account? <a href="#" class="underline">Click here</a> to log in!
+        Already have an account? <RouterLink to="/signup" class="underline">Click here</RouterLink> to log in!
       </p>
     </div>
     </div>
@@ -39,7 +39,7 @@
           
 
           <div>
-            <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
+            <button class="py-4 px-6 bg-sky-600 text-white rounded-lg">
               Login
             </button>
           </div>

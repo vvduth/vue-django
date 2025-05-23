@@ -10,7 +10,7 @@
         </div>
 
         <div class="menu-center flex space-x-12">
-          <a href="#" class="text-purple-700">
+          <a href="#" class="text-sky-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
