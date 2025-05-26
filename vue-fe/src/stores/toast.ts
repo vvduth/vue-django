@@ -1,11 +1,5 @@
 import { defineStore } from "pinia";
 
-type ToastState = {
-    ms: number;
-    message: string;
-    classes: string;
-    isVisible: boolean;
-}
 
 export const useToastStore = defineStore("toast", {
     state:() =>({
