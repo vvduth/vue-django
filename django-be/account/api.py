@@ -13,7 +13,7 @@ def signup(request):
     # Here you would typically handle user creation logic
     # For now, we return a simple success message
     data = request.data
-    message =
+    message = ''
     form = SignUpForm({
         'email': data.get('email'),
         'name': data.get('name'),
@@ -24,7 +24,7 @@ def signup(request):
         user = form.save()
         # send verification email
     else:
-        return JsonResponse({"error": form.errors}, status=400)
+        return JsonResponse({"error": form.errors, "message": 'Error sign up'}, status=400)
 
 
-    return JsonResponse({"message": "User signed up successfully!"})
+    return JsonResponse({"message": "User signed up successfully!"}, status=201)
