@@ -47,8 +47,11 @@
 import axios from 'axios';
 import { useToastStore } from '@/stores/toast';
 import { ref } from 'vue';
-const toastStore = useToastStore();
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
+const toastStore = useToastStore();
+const router = useRouter()
 const form = ref({
   email: '',
   password: ''
@@ -64,6 +67,8 @@ const submitForm = async () => {
     return;
   }
 
+  const userStore = useUserStore();
+
 
 
 
@@ -71,23 +76,20 @@ const submitForm = async () => {
     try {
       const response = await axios.post('/api/login/', {
         email: form.value.email,
-
         password: form.value.password,
-
       });
-      if (response.status === 201) {
+      if (response.status === 200) {
 
         console.log('Log in successful:', response.data);
+        userStore.setToken(response.data)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
         toastStore.showToast(
           5000,
           'Log in successful!',
           'bg-green-500'
         );
 
-        form.value = {
-          email: '',
-          password: ''
-        };
+
       } else {
         console.error('Log in failed:', response.data);
         toastStore.showToast(
@@ -96,6 +98,8 @@ const submitForm = async () => {
           'bg-red-500'
         );
       }
+
+      
     } catch (error) {
       toastStore.showToast(
         5000,
@@ -104,6 +108,28 @@ const submitForm = async () => {
       );
       console.error('Error during Log in:', error);
 
+    } finally {
+      form.value = {
+        email: '',
+        password: ''
+      };
+    }
+
+    try {
+      const getProfileResponse = await axios.get('/api/me/');
+      if (getProfileResponse.status === 200) {
+        userStore.setUserInfo(getProfileResponse.data);
+        
+        console.log('User profile fetched successfully:', getProfileResponse.data);
+        router.push('/feed');
+      } 
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      toastStore.showToast(
+        5000,
+        'An error occurred while fetching user profile. Please try again later.',
+        'bg-red-500'
+      );
     }
   }
 };</script>

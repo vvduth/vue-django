@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
+
 </script>
 
 <template>
@@ -9,7 +13,7 @@
           <a href="#" class="text-xl">Wey</a>
         </div>
 
-        <div class="menu-center flex space-x-12">
+        <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
           <a href="#" class="text-sky-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -80,9 +84,15 @@
         </div>
 
         <div class="menu-right">
-          <a href="#">
+          <template v-if="userStore.user.isAuthenticated">
+            <a href="#">
             <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
           </a>
+          </template>
+          <template v-else>
+            <RouterLink to="/login" class="text-sky-700">Login</RouterLink>
+            <RouterLink to="/signup" class="ml-4 py-2 px-4 bg-sky-600 text-white rounded-lg">Sign Up</RouterLink>
+          </template>
         </div>
       </div>
     </div>
