@@ -115,22 +115,9 @@ import Trends from "@/components/Trends.vue";
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
 import {  useRouter } from "vue-router";
+import type { User } from "@/types";
+import type { Post } from "@/types";
 
-interface Post {
-  id: number;
-  body: string;
-  created_by: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  created_at_formatted: string;
-}
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 const userStore = useUserStore();
 
 const userPosts = ref<Post[]>([]);

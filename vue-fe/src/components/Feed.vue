@@ -128,16 +128,7 @@ import { onMounted, ref } from "vue";
 import PeopleYouMayKnow from "./PeopleYouMayKnow.vue";
 import Trends from "./Trends.vue";
 import axios from "axios";
-interface Post {
-  id: number;
-  body: string;
-  created_by: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  created_at_formatted: string;
-}
+import type { Post } from "@/types";
 
 const posts = ref<Post[]>([]);
 const postBody = ref<string>("");
