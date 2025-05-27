@@ -19,6 +19,7 @@ def me(request):
 
 
 
+
 @api_view(['POST'])
 @authentication_classes([])  # No authentication required for signup
 @permission_classes([])  # No permission required for signup

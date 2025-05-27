@@ -4,7 +4,7 @@
       <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
         <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
 
-        <p><strong>Eve skinky</strong></p>
+        <p><strong>{{ user?.name || 'Loading...' }}</strong></p>
 
         <div class="mt-6 flex space-x-8 justify-around">
           <p class="text-xs text-gray-500">182 friends</p>
@@ -14,35 +14,7 @@
     </div>
 
     <div class="main-center col-span-2 space-y-4">
-      <!-- Post form -->
-      <div class="bg-white border border-gray-200 rounded-lg">
-        <form @submit.prevent="submitPostForm" action="POST">
-          <div class="p-4">
-            <textarea
-              v-model="postBody"
-              class="p-4 w-full bg-gray-100 rounded-lg"
-              placeholder="What are you thinking about?"
-            ></textarea>
-          </div>
-
-          <div class="p-4 border-t border-gray-100 flex justify-between">
-            <a
-              href="#"
-              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-              >Attach image</a
-            >
-
-            <button
-              href="#"
-              class="inline-block py-4 px-6 bg-sky-600 text-white rounded-lg"
-            >
-              Post
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <template v-for="post in posts" :key="post.id">
+      <template v-for="post in userPosts" :key="post.id">
         <div class="p-4 bg-white border border-gray-200 rounded-lg">
           <!-- Post header -->
           <div class="mb-6 flex items-center justify-between">
@@ -137,10 +109,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import PeopleYouMayKnow from "@/components/PeopleYouMayKnow.vue";
 import Trends from "@/components/Trends.vue";
 import axios from "axios";
+import { useUserStore } from "@/stores/user";
+import {  useRouter } from "vue-router";
+
 interface Post {
   id: number;
   body: string;
@@ -151,33 +126,34 @@ interface Post {
   };
   created_at_formatted: string;
 }
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+const userStore = useUserStore();
 
-const posts = ref<Post[]>([]);
-const postBody = ref<string>("");
+const userPosts = ref<Post[]>([]);
+const user = ref<User|null>(null)
+const router = useRouter()
 
-const submitPostForm = async () => {
-  console.log("Submitting post:", postBody.value);
-
-  try {
-    const res = await axios.post("/api/posts/create/", {
-      body: postBody.value,
-    });
-    posts.value.unshift(res.data); // Add the new post to the beginning of the posts array
-    postBody.value = ""; // Clear the input field after submission
-  } catch (error) {
-    console.error("Error submitting post:", error);
-  }
-};
-
-const fetchAllPosts = async () => {
-  try {
-    const res = await axios.get("/api/posts/");
-    posts.value = res.data;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-  }
-};
 onMounted(() => {
-  fetchAllPosts();
+  getUserPost();
 });
+
+
+const getUserPost = async () => {
+  try {
+    const response = await axios.get(`/api/posts/profile/${router.currentRoute.value.params.id}/`);
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch user posts");
+    }
+    
+    userPosts.value = response.data.posts;
+    user.value = response.data.user;
+  } catch (error) {
+    console.error("Error fetching user posts:", error);
+  }
+}
+
 </script>
