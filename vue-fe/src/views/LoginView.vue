@@ -69,9 +69,6 @@ const submitForm = async () => {
 
   const userStore = useUserStore();
 
-
-
-
   if (errors.value.length === 0) {
     try {
       const response = await axios.post('/api/login/', {

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
+import { RouterLink } from 'vue-router';
 
 const userStore = useUserStore();
+
 
 </script>
 
@@ -85,9 +87,9 @@ const userStore = useUserStore();
 
         <div class="menu-right">
           <template v-if="userStore.user.isAuthenticated">
-            <a href="#">
+            <RouterLink :to="`/profile/${userStore.user.id}`" >
             <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-          </a>
+          </RouterLink>
           </template>
           <template v-else>
             <RouterLink to="/login" class="text-sky-700">Login</RouterLink>

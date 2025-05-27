@@ -138,8 +138,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import PeopleYouMayKnow from "./PeopleYouMayKnow.vue";
-import Trends from "./Trends.vue";
+import PeopleYouMayKnow from "@/components/PeopleYouMayKnow.vue";
+import Trends from "@/components/Trends.vue";
 import axios from "axios";
 interface Post {
   id: number;

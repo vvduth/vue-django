@@ -69,9 +69,9 @@ export const useUserStore = defineStore("user", {
             this.user.name = user.name;
             this.user.email = user.email;
 
-            localStorage.setItem('this.user.id', this.user.id as string);
-            localStorage.setItem('this.user.name', this.user.name as string);
-            localStorage.setItem('this.user.email', this.user.email as string);
+            localStorage.setItem('user.id', this.user.id as string);
+            localStorage.setItem('user.name', this.user.name as string);
+            localStorage.setItem('user.email', this.user.email as string);
         },
         async refresh() {
             try {
