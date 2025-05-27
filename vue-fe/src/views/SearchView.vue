@@ -2,11 +2,11 @@
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
     <div class="main-center col-span-3 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">
-        <div class="p-4 flex space-x-4">
-          <input type="search" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you looking for?" />
+        <form @submit.prevent="submitSearch" class="p-4 flex space-x-4">
+          <input v-model="searchQuery" type="search" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you looking for?" />
 
-          <a href="#" class="inline-block py-4 px-6 bg-sky-600 text-white rounded-lg">Post</a>
-        </div>
+          <button href="#" class="inline-block py-4 px-6 bg-sky-600 text-white rounded-lg">Post</button>
+        </form>
       </div>
 
       <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4">
@@ -127,5 +127,28 @@
 <script setup lang="ts">
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
+import axios from 'axios';
+import { ref } from 'vue';
+const searchQuery = ref('');
+const submitSearch = async (event: Event) => {
+  event.preventDefault() // Optional since you're using .prevent
+  
+  if (!searchQuery.value.trim()) {
+    return // Don't search with empty query
+  }
+  
+  try {
+    // Use searchQuery.value instead of expecting it as parameter
+    console.log('Searching for:', searchQuery.value)
+    
+    const res = await axios.post('/api/search/', {
+      query: searchQuery.value
+    })
 
+    console.log('Search results:', res.data)
+    
+  } catch (error) {
+    console.error('Search failed:', error)
+  }
+}
 </script>
