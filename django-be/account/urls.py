@@ -8,4 +8,5 @@ urlpatterns =  [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('friends/<uuid:pk>/request/', api.send_friendship_request, name='send_friendship_request'),
     path('friends/<uuid:pk>/', api.friends, name='friends'),
+    path('friends/<uuid:pk>/<str:action>/', api.handle_friendship_request, name='handle_friendship_request'),
 ]

@@ -57,7 +57,7 @@ def friends(request,pk):
     friendship_requests  = []
     user = User.objects.get(pk=pk)
     if user == request.user:
-        friendship_requests = FriendshipRequest.objects.filter(created_for=request.user)
+        friendship_requests = FriendshipRequest.objects.filter(created_for=request.user, status=FriendshipRequest.SENT)
         friendship_requests = FriendshipRequestSerializer(friendship_requests, many=True).data
     user_friends = user.friends.all()
 
@@ -77,3 +77,18 @@ def send_friendship_request(request, pk):
     friendship_request =  FriendshipRequest.objects.create(created_for=user, created_by=request.user)
 
     return JsonResponse({"message": "Friendship request sent successfully!"}, status=201)
+
+@api_view(['POST'])
+def handle_friendship_request(request, pk, action):
+    """
+    Handle friendship request actions (accept or reject).
+    """
+    user = User.objects.get(pk=pk)
+    friendship_request = FriendshipRequest.objects.filter(created_for=request.user).get(created_by=user)
+    friendship_request.status = action
+    friendship_request.save()
+
+    user.friends.add(request.user)
+
+
+    return JsonResponse({"message": f"Friendship request {action} successfully!"}, status=200)
