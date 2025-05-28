@@ -68,16 +68,38 @@ def friends(request,pk):
         'friendship_requests': friendship_requests
     }, safe=False, status=200)
 
+
 @api_view(['POST'])
 def send_friendship_request(request, pk):
     """
     Send a friendship request to another user.
     """
-    print("Sending friendship request to user with ID:", pk)
-    user = User.objects.get(pk=pk)
-    friendship_request =  FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+    try:
+        user = User.objects.get(pk=pk)
+        if user == request.user:
+            return JsonResponse({"error": "You cannot send a friendship request to yourself."}, status=400)
 
-    return JsonResponse({"message": "Friendship request sent successfully!"}, status=201)
+        # Check if users are already friends
+        if request.user.friends.filter(id=user.id).exists():
+            return JsonResponse({"error": "You are already friends with this user."}, status=400)
+
+
+
+        # Check for existing requests (better to use exists() for efficiency)
+        check1 = FriendshipRequest.objects.filter(created_for=request.user, created_by=user).exists()
+        check2 = FriendshipRequest.objects.filter(created_for=user, created_by=request.user).exists()
+
+        if not check1 and not check2:
+            friendship_request = FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+            return JsonResponse({"message": "Friendship request sent successfully!"}, status=201)
+        else:
+            return JsonResponse({"error": "Friendship request already exists."}, status=400)
+
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+
+
+
 
 @api_view(['POST'])
 def handle_friendship_request(request, pk, action):
