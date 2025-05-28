@@ -10,6 +10,13 @@
           <p class="text-xs text-gray-500">182 friends</p>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
+        <div class="mt-6">
+          <button class="w-full bg-sky-700 text-white text-xs py-2 rounded-lg"
+                  @click="addFriend">
+          
+            Add friend
+          </button>
+        </div>
       </div>
     </div>
 
@@ -59,6 +66,15 @@ const getUserPost = async () => {
     user.value = response.data.user;
   } catch (error) {
     console.error("Error fetching user posts:", error);
+  }
+}
+
+const addFriend = async () => {
+  try {
+    const addFriendRes = await axios.post(`/api/friends/request/${route.params.id}/`)
+    // user.value = addFriendRes.data.user;
+  } catch (error) {
+    console.error("Error adding friend:", error); 
   }
 }
 
