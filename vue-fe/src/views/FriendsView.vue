@@ -87,9 +87,13 @@
 
           <div class="mt-6 space-x-4">
             <button class="inline-block py-4 px-6 bg-sky-600
-            text-white rounded-lg">Accept</button>
+            text-white rounded-lg"
+            @click="handleFriendRequest('accepted',friendRequest.created_by.id)"
+            >Accept</button>
             <button class="inline-block py-4 px-6 bg-rose-700
-            text-white rounded-lg">No no</button>
+            text-white rounded-lg"
+            @click="handleFriendRequest('rejected',friendRequest.created_by.id)"
+            >No no</button>
           </div>
         </div>
       </div>
@@ -153,4 +157,14 @@ const addFriend = async () => {
     console.error("Error adding friend:", error);
   }
 };
+
+const handleFriendRequest = async (action: 'accepted' | 'rejected', pk:string) => {
+  try{
+    const res = await axios.post(`/api/friends/${pk}/${action}/`);
+    console.log(`Friend request ${action} successfully:`, res.data);
+
+  } catch (error) {
+    console.error(`Error handling friend request (${action}):`, error);
+  }
+  }
 </script>
