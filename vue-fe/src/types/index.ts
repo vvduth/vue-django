@@ -18,7 +18,19 @@ export interface Post {
 export interface SerachResponse {
   data: {
     posts: Post[];
-  users: User[];
-  }
-  
+    users: User[];
+  };
+}
+
+export interface Friendrequest {
+  id: string;
+      created_by: User;
+}
+
+export interface GetFriendsResponse {
+  data: {
+    friends: User[];
+    user: User;
+    friendship_requests:Friendrequest[];
+  };
 }

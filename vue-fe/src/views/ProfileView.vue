@@ -7,7 +7,9 @@
         <p><strong>{{ user?.name || 'Loading...' }}</strong></p>
 
         <div class="mt-6 flex space-x-8 justify-around">
-          <p class="text-xs text-gray-500">182 friends</p>
+          <RouterLink
+            :to="`/profile/${route.params.id}/friends`"
+          class="text-xs text-gray-500">182 friends</RouterLink>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
         <div class="mt-6">
@@ -71,7 +73,7 @@ const getUserPost = async () => {
 
 const addFriend = async () => {
   try {
-    const addFriendRes = await axios.post(`/api/friends/request/${route.params.id}/`)
+    const addFriendRes = await axios.post(`/api/friends/${route.params.id}/request/`)
     // user.value = addFriendRes.data.user;
   } catch (error) {
     console.error("Error adding friend:", error); 
