@@ -9,7 +9,7 @@
         </p>
 
         <div class="mt-6 flex space-x-8 justify-around">
-          <p class="text-xs text-gray-500">182 friends</p>
+          <p class="text-xs text-gray-500">{{ user?.friends_count }} friends</p>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
         <div class="mt-6">
@@ -46,7 +46,7 @@
           </p>
 
           <div class="mt-6 flex space-x-8 justify-around">
-            <p class="text-xs text-gray-500">182 friends</p>
+            <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
             <p class="text-xs text-gray-500">120 posts</p>
           </div>
         </div>
@@ -81,7 +81,7 @@
           </p>
 
           <div class="mt-6 flex space-x-8 justify-around">
-            <p class="text-xs text-gray-500">182 friends</p>
+            <p class="text-xs text-gray-500">{{}} friends</p>
             <p class="text-xs text-gray-500">120 posts</p>
           </div>
 
@@ -110,14 +110,16 @@
 import { ref, watch } from "vue";
 import PeopleYouMayKnow from "@/components/PeopleYouMayKnow.vue";
 import Trends from "@/components/Trends.vue";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import type { Friendrequest, GetFriendsResponse, User } from "@/types";
 import type { Post } from "@/types";
 import { useRoute } from "vue-router";
+import { useToastStore } from "@/stores/toast";
 
 const userFriends = ref<User[]>([]);
 const friendShipRequests = ref<Friendrequest[]>([]);
 const user = ref<User | null>(null);
+const toastStore = useToastStore();
 const route = useRoute();
 
 const getUserFriend = async () => {
@@ -163,8 +165,12 @@ const handleFriendRequest = async (action: 'accepted' | 'rejected', pk:string) =
     const res = await axios.post(`/api/friends/${pk}/${action}/`);
     console.log(`Friend request ${action} successfully:`, res.data);
 
-  } catch (error) {
-    console.error(`Error handling friend request (${action}):`, error);
+    
+  } catch (error:any) {
+    
+    console.log(`Error handling friend request (${action}):`, error);
+    } 
+    
   }
-  }
+  
 </script>
