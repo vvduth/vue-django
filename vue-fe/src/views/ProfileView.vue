@@ -9,7 +9,7 @@
         <div class="mt-6 flex space-x-8 justify-around">
           <RouterLink
             :to="`/profile/${route.params.id}/friends`"
-          class="text-xs text-gray-500">182 friends</RouterLink>
+          class="text-xs text-gray-500">{{ user?.friends_count }} friends</RouterLink>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
         <div class="mt-6">
